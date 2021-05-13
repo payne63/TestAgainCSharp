@@ -7,7 +7,7 @@ public class MainScene : Node2D
 {
 
     [Export(PropertyHint.Range, "0,10")]
-    float speed = 1.0f;
+    float speed = 2.0f;
     Sprite sprite;
     public override void _Ready()
     {
