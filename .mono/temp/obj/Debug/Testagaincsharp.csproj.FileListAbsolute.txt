@@ -1,0 +1,8 @@
+C:\Users\Florent\Documents\godotTest3\TESTAGAINCSHARP\.mono\temp\bin\Debug\Testagaincsharp.dll
+C:\Users\Florent\Documents\godotTest3\TESTAGAINCSHARP\.mono\temp\bin\Debug\Testagaincsharp.pdb
+C:\Users\Florent\Documents\godotTest3\TESTAGAINCSHARP\.mono\temp\obj\Debug\Testagaincsharp.csprojAssemblyReference.cache
+C:\Users\Florent\Documents\godotTest3\TESTAGAINCSHARP\.mono\temp\obj\Debug\Testagaincsharp.AssemblyInfoInputs.cache
+C:\Users\Florent\Documents\godotTest3\TESTAGAINCSHARP\.mono\temp\obj\Debug\Testagaincsharp.AssemblyInfo.cs
+C:\Users\Florent\Documents\godotTest3\TESTAGAINCSHARP\.mono\temp\obj\Debug\Testagaincsharp.csproj.CoreCompileInputs.cache
+C:\Users\Florent\Documents\godotTest3\TESTAGAINCSHARP\.mono\temp\obj\Debug\Testagaincsharp.dll
+C:\Users\Florent\Documents\godotTest3\TESTAGAINCSHARP\.mono\temp\obj\Debug\Testagaincsharp.pdb
