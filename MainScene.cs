@@ -7,13 +7,15 @@ public class MainScene : Node2D
 {
 
     [Export(PropertyHint.Range, "0,10")]
-    float speed = 2.0f;
+    float speed = 1.0f;
     Sprite sprite;
     public override void _Ready()
     {
         sprite = GetNode<Sprite>("SpriteGodot");
         sprite.Modulate = Colors.Aqua;
         Position = new Vector2().Random();
+        //this is a comment for test
+        //and another
     }
 
     public override void _Process(float delta)
