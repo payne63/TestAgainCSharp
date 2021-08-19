@@ -8,11 +8,18 @@ public class MainScene : Node2D
 
     [Export(PropertyHint.Range, "0,10")]
     float speed = 1.0f;
+
+     [Export(PropertyHint.ResourceType, "Texture")]
+    private Texture tex ;
+
     Sprite sprite;
+
     public override void _Ready()
     {
+        var reference = GetScript();
         sprite = GetNode<Sprite>("SpriteGodot");
         sprite.Modulate = Colors.Aqua;
+        // sprite.Texture = tex;
         Position = new Vector2().Random();
         //this is a comment for test
         //and another
