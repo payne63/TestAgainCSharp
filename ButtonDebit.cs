@@ -7,6 +7,13 @@ public class ButtonDebit : Button
     private LineEdit lineEdit;
     private Button buttonDelete;
 
+    [Signal]
+    public delegate void hasDelete();
+    [Signal]
+    public delegate void hasValidate();
+
+    public int? length = null; 
+
     public override void _Ready()
     {
         lineEdit = GetNode<LineEdit>("LineEdit");
@@ -24,19 +31,23 @@ public class ButtonDebit : Button
 
         if ( resultStatus == true && value > 5 && value <= 6000)
         {
+            length = value;
             this.Text = value.ToString() + " mm";
             lineEdit.Hide();
             Disabled = false;
             buttonDelete.Show();
+            EmitSignal(nameof(hasValidate));
         }
         else
         {
+            length = null;
             lineEdit.Text = string.Empty;
         }
     }
 
     void NewLineEdition()
     {
+        length = null;
         Text = string.Empty;
         Disabled = true;
         lineEdit.Show();
@@ -47,7 +58,12 @@ public class ButtonDebit : Button
 
     void Delete()
     {
+        EmitSignal(nameof(hasDelete));
         this.QueueFree();
     }
 
+    public void GetFocusLineEdit()
+    {
+        lineEdit.GrabFocus();
+    }
 }

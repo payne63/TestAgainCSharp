@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://fonts/font.tres" type="DynamicFont" id=1]
+[ext_resource path="res://ButtonStartResolution.cs" type="Script" id=2]
+[ext_resource path="res://themeButton/BlocPipeHover.tres" type="StyleBox" id=4]
+[ext_resource path="res://themeButton/BlocPipeNormal.tres" type="StyleBox" id=5]
+
+[node name="ButtonStartResolution" type="Button"]
+margin_right = 192.0
+margin_bottom = 65.0
+rect_min_size = Vector2( 130, 65 )
+custom_styles/hover = ExtResource( 4 )
+custom_styles/disabled = ExtResource( 5 )
+custom_styles/normal = ExtResource( 5 )
+custom_fonts/font = ExtResource( 1 )
+text = "Résoudre"
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
