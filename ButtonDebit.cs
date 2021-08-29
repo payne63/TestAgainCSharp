@@ -23,6 +23,7 @@ public class ButtonDebit : Button
         this.Disabled = true;
         buttonDelete.Connect("pressed", this, nameof(Delete));
         Connect("pressed", this, nameof(NewLineEdition));
+        Connect("focus_entered",this, nameof(GetFocusLineEdit));
     }
 
     void ValidationLine(string text)

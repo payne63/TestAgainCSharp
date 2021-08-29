@@ -1,0 +1,118 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://fonts/font.tres" type="DynamicFont" id=1]
+[ext_resource path="res://fonts/fontsmall.tres" type="DynamicFont" id=2]
+[ext_resource path="res://ButtonDebit2.cs" type="Script" id=3]
+[ext_resource path="res://themeButton/BlocPipeHover.tres" type="StyleBox" id=4]
+[ext_resource path="res://themeButton/BlocPipe.tres" type="StyleBox" id=5]
+[ext_resource path="res://themeButton/BlocPipeNormal.tres" type="StyleBox" id=6]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.356863, 0.172549, 0.172549, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.356863, 0.172549, 0.172549, 1 )
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="ButtonDebit" type="Button"]
+margin_left = 1.0
+margin_right = 281.0
+margin_bottom = 45.0
+rect_min_size = Vector2( 280, 40 )
+custom_styles/hover = ExtResource( 4 )
+custom_styles/disabled = ExtResource( 6 )
+custom_styles/normal = ExtResource( 6 )
+custom_fonts/font = ExtResource( 1 )
+disabled = true
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 7.0
+margin_top = 7.0
+margin_right = -7.0
+margin_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer"]
+margin_right = 100.0
+margin_bottom = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_min_size = Vector2( 100, 0 )
+hint_tooltip = "Saisir la dimension de la coupe"
+focus_next = NodePath("../LineEdit2")
+custom_styles/focus = SubResource( 1 )
+custom_styles/normal = SubResource( 2 )
+custom_fonts/font = ExtResource( 2 )
+align = 1
+max_length = 4
+placeholder_text = "Longueur"
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+margin_left = 104.0
+margin_top = 4.0
+margin_right = 156.0
+margin_bottom = 27.0
+custom_fonts/font = ExtResource( 2 )
+text = "mm  X"
+
+[node name="LineEdit2" type="LineEdit" parent="HBoxContainer"]
+margin_left = 160.0
+margin_right = 220.0
+margin_bottom = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+hint_tooltip = "Saisir la quantité pour cette longueur de coupe"
+custom_styles/focus = SubResource( 1 )
+custom_styles/normal = SubResource( 2 )
+custom_fonts/font = ExtResource( 2 )
+align = 1
+max_length = 3
+placeholder_text = "Qt"
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="HBoxContainer"]
+margin_left = 224.0
+margin_top = 4.0
+margin_right = 236.0
+margin_bottom = 27.0
+custom_fonts/font = ExtResource( 2 )
+text = "p"
+
+[node name="ButtonDelete" type="Button" parent="HBoxContainer"]
+margin_left = 240.0
+margin_right = 254.0
+margin_bottom = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+custom_styles/hover = ExtResource( 5 )
+custom_styles/pressed = ExtResource( 4 )
+custom_styles/normal = ExtResource( 6 )
+custom_fonts/font = ExtResource( 2 )
+text = "X"
+__meta__ = {
+"_edit_use_anchors_": false
+}

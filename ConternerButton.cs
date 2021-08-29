@@ -6,81 +6,154 @@ using System.Collections.Generic;
 public class ConternerButton : Control
 {
     private VBoxContainer vBoxContainer;
-
     private PanelContainer panelContainer;
-    private LineEdit lineEdit;
+    private LineEdit lineEditDescription;
+    private LineEdit lineEditLengthBase;
+    private LineEdit lineEditCutSize;
+    private Button buttonResolution;
+    private ContenerResult contenerResult;
 
     [Export(PropertyHint.ResourceType, "PackedScene")]
-    private PackedScene packedSceneButton;//= ResourceLoader.Load<PackedScene>("res://ButtonDebit.tscn");
-
-    [Export(PropertyHint.ResourceType, "PackedScene")]
-    PackedScene packedSceneButtonResolution;
+    private PackedScene packedSceneButton;
 
     PipeManager pipeManager;
+    Boolean GenerateDone = false;
 
     public override void _Ready()
     {
-        vBoxContainer = GetNode<VBoxContainer>("PanelContainer/VBoxContainer");
+        vBoxContainer = GetNode<VBoxContainer>("PanelContainer/GridContainer/VBoxContainer");
         panelContainer = GetNode<PanelContainer>("PanelContainer");
-        lineEdit = GetNode<LineEdit>("PanelContainer/VBoxContainer/LineEdit");
-        AddButtonDebit();
-        AddButtonResolution();
+        lineEditDescription = GetNode<LineEdit>("PanelContainer/GridContainer/LineEditDescription");
+        lineEditLengthBase = GetNode<LineEdit>("PanelContainer/GridContainer/LineEditLength");
+        lineEditCutSize = GetNode<LineEdit>("PanelContainer/GridContainer/LineEditCutSize");
+        buttonResolution = GetNode<Button>("PanelContainer/GridContainer/ButtonResolution");
+        contenerResult = GetNode<ContenerResult>("ConteneurResult");
+
+        lineEditDescription.Connect("text_entered",this, nameof(DescriptionValidation));
+
+        lineEditLengthBase.Connect("text_entered",this, nameof(LengthBaseValidation));
+
+        lineEditCutSize.Connect("text_entered",this, nameof(CutSizeValidation));
+
+        buttonResolution.Connect("pressed",this , nameof(StartResolve));
+        var buttonDebit = AddButtonDebit();
+        lineEditCutSize.FocusNext = buttonDebit.GetPath();
+
+        lineEditDescription.GrabFocus();
+        contenerResult.Hide();
     }
 
-    public override void _Process(float delta)
+
+    private void DescriptionValidation( string text)
     {
+        if (GetParent<ScrollContainer>() == null) return;
+        GetParent<ScrollContainer>().GetParent<Tabs>().Name = text;
+        lineEditDescription.FocusNext =lineEditLengthBase.GetPath();
+        lineEditLengthBase.FocusNext =lineEditCutSize.GetPath();
+        lineEditCutSize.FocusNext = vBoxContainer.GetChild<Control>(0)?.GetPath();
+        lineEditLengthBase.GrabFocus();
+        lineEditLengthBase.SelectAll();
     }
 
-    private void AddButtonDebit()
+    private void LengthBaseValidation( string text)
     {
-        ButtonDebit instance = packedSceneButton.Instance<ButtonDebit>();
-        instance.Connect("hasDelete", this, nameof(ResizeHeigth));
+        bool resultStatus = int.TryParse(text, out int value);
+        if (resultStatus == true && value > 0 && value <= 6000)
+        {
+            lineEditLengthBase.Deselect();
+            lineEditCutSize.GrabFocus();
+            lineEditCutSize.SelectAll();
+        }
+        else
+        {
+            lineEditLengthBase.Text = string.Empty;
+        }
+    }
+
+    private void CutSizeValidation( string text)
+    {
+        bool resultStatus = int.TryParse(text, out int value);
+        if (resultStatus == true && value > 0 && value <= 10)
+        {
+            lineEditCutSize.Deselect();
+            GetNode<ButtonDebit2>(lineEditCutSize.FocusNext).GrabFocus();
+        }
+        else
+        {
+            lineEditCutSize.Text = string.Empty;
+        }
+    }
+
+    private ButtonDebit2 AddButtonDebit()
+    {
+        ButtonDebit2 instance = packedSceneButton.Instance<ButtonDebit2>();
         instance.Connect("hasValidate", this, nameof(AddButtonDebit));
+        instance.Connect("tree_exited",this, nameof(ItemDelete));
         vBoxContainer.AddChild(instance);
-        vBoxContainer.MoveChild(instance, vBoxContainer.GetChildCount() - 2);
         instance.GetFocusLineEdit();
+        return instance;
     }
 
-    private void AddButtonResolution()
-    {
-        ButtonStartResolution instance = packedSceneButtonResolution.Instance<ButtonStartResolution>();
-        instance.Connect("hasResolve", this, nameof(StartResolve));
-        vBoxContainer.AddChild(instance);
-    }
 
-    public void ResizeHeigth()
-    {
-        panelContainer.RectSize -= new Vector2(0, 68);
-    }
 
-    void StartResolve()
+    public void ItemDelete()
     {
-        GD.Print("has been resolve");
-
-        List<int> listCut = new List<int>();
+        panelContainer.RectSize -= new Vector2(0, 50);
+        bool noFreeItem = false;
         foreach (var item in vBoxContainer.GetChildren())
         {
             switch (item)
             {
-                case ButtonDebit buttonDebit when buttonDebit.length != null:
-                    listCut.Add((int)buttonDebit.length);
+                case ButtonDebit2 buttonDebit when buttonDebit.length == null || buttonDebit.qt == null:
+                    noFreeItem = true;
+                    GD.PrintErr(true, buttonDebit);
+                    break;
+            }
+        }
+        if (noFreeItem == false) AddButtonDebit();
+        if (vBoxContainer.GetChildCount() == 0) AddButtonDebit();
+    }
+
+    void StartResolve()
+    {
+
+        if (GenerateDone)
+        {
+            contenerResult.ClearDataPipe();
+        }
+
+        List<int> listCuts = new List<int>();
+        foreach (var item in vBoxContainer.GetChildren())
+        {
+            switch (item)
+            {
+                case ButtonDebit2 buttonDebit when buttonDebit.length != null:
+                    for (int i = 1; i <= buttonDebit.qt; i++)
+                    {
+                        listCuts.Add((int)buttonDebit.length);
+                    }
                     break;
             }
         }
 
-        pipeManager = new PipeManager(lineEdit.Text, 6005, listCut, 5);
+        int.TryParse(lineEditLengthBase.Text, out int lengthbase); 
+        int.TryParse(lineEditCutSize.Text, out int cutSize);
+
+        pipeManager = new PipeManager(lineEditDescription.Text, lengthbase+cutSize, listCuts, cutSize);
 
         pipeManager.Process();
-        foreach (var pipe in pipeManager.GetEnumerable())
-        {
-            String cutString = $"{lineEdit.Text} : ";
-            foreach (var cut in pipe)
-            {
-                cutString += cut.ToString();
-                cutString += "-";
-            }
-            GD.Print(cutString);
-        }
+
+        contenerResult.Show();
+        contenerResult.FillDataPipe(pipeManager.GetEnumerable());
+
+        GenerateDone = true;
+
+    }
+
+
+    public int GetLengthMaxPipe()
+    {
+        return lineEditLengthBase.Text.ToInt();
     }
 
 }
